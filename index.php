@@ -1,3 +1,7 @@
+<?php
+echo 'teste';
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
