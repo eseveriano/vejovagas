@@ -81,9 +81,20 @@
             display: block;
             margin: 20px auto; /* Centraliza a logo */
         }
+
+        /* Botão fixo para abrir/fechar o menu */
+        #toggleButton {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000; /* Garante que o botão fique acima de outros elementos */
+        }
     </style>
 </head>
 <body>
+
+    <!-- Botão fixo para alternar o menu -->
+    <button class="btn btn-dark" id="toggleButton">☰</button>
 
     <!-- Menu Lateral -->
     <div class="sidebar expanded" id="sidebar">
@@ -93,7 +104,6 @@
             <a class="nav-link" href="#">Serviços</a>
             <a class="nav-link" href="#">Contato</a>
         </nav>
-        <button class="btn btn-dark" id="toggleButton" style="margin: 10px;">Toggle Menu</button>
     </div>
 
     <div class="content" id="content">
