@@ -13,6 +13,7 @@
             background-color: #f0f8f5;
             display: flex;
             min-height: 100vh;
+            margin: 0;
         }
 
         .sidebar {
@@ -30,7 +31,8 @@
         }
 
         .sidebar.collapsed {
-            width: 60px; /* Largura colapsada */
+            width: 0; /* Largura colapsada */
+            padding: 0; /* Remove padding quando colapsado */
         }
 
         .sidebar .nav-link {
@@ -48,7 +50,7 @@
         }
 
         .content.collapsed {
-            margin-left: 60px; /* Margem quando o menu está colapsado */
+            margin-left: 0; /* Margem quando o menu está colapsado */
         }
 
         .form-container {
@@ -85,9 +87,6 @@
 
     <!-- Menu Lateral -->
     <div class="sidebar expanded" id="sidebar">
-        <div class="text-center">
-            <img src="logo-removebg-preview.png" alt="Logo" class="logo">
-        </div>
         <nav class="nav flex-column">
             <a class="nav-link active" href="#">Início</a>
             <a class="nav-link" href="#">Sobre</a>
@@ -98,6 +97,9 @@
     </div>
 
     <div class="content" id="content">
+        <div class="text-center">
+            <img src="logo-removebg-preview.png" alt="Logo" class="logo">
+        </div>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-6 col-md-8 col-sm-10">
