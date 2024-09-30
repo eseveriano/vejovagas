@@ -11,6 +11,9 @@
     <style>
         body {
             background-color: #f0f8f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         .form-container {
@@ -19,6 +22,7 @@
             padding: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 20px; /* Espaço acima do formulário */
+            flex: 1; /* Faz o contêiner ocupar o espaço restante */
         }
 
         .btn-green {
@@ -40,6 +44,10 @@
             max-width: 150px; /* Tamanho da logo */
             display: block;
             margin: 20px auto; /* Centraliza a logo */
+        }
+
+        .navbar {
+            background-color: #28a745; /* Cor do menu inferior */
         }
     </style>
 </head>
@@ -76,6 +84,26 @@
             </div>
         </div>
     </div>
+
+    <!-- Menu inferior -->
+    <nav class="navbar fixed-bottom navbar-expand-lg navbar-light">
+        <div class="container">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-100 justify-content-around">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Início</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Sobre</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Serviços</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contato</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
     <!-- Bootstrap JS and dependencies (Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
