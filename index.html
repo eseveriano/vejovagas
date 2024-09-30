@@ -24,6 +24,7 @@
             overflow: hidden;
             position: fixed; /* Fixa o menu lateral */
             height: 100%;
+            z-index: 1000;
         }
 
         .sidebar.expanded {
@@ -87,7 +88,7 @@
             position: fixed;
             top: 10px;
             left: 10px;
-            z-index: 1000; /* Garante que o botão fique acima de outros elementos */
+            z-index: 2000; /* Garante que o botão fique acima de outros elementos */
         }
     </style>
 </head>
@@ -97,7 +98,7 @@
     <button class="btn btn-dark" id="toggleButton">☰</button>
 
     <!-- Menu Lateral -->
-    <div class="sidebar expanded" id="sidebar">
+    <div class="sidebar collapsed" id="sidebar">
         <nav class="nav flex-column">
             <a class="nav-link active" href="#">Início</a>
             <a class="nav-link" href="#">Sobre</a>
@@ -106,7 +107,7 @@
         </nav>
     </div>
 
-    <div class="content" id="content">
+    <div class="content collapsed" id="content">
         <div class="text-center">
             <img src="logo-removebg-preview.png" alt="Logo" class="logo">
         </div>
