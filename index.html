@@ -12,8 +12,43 @@
         body {
             background-color: #f0f8f5;
             display: flex;
-            flex-direction: column;
             min-height: 100vh;
+        }
+
+        .sidebar {
+            background-color: #28a745;
+            color: white;
+            width: 250px; /* Largura do menu lateral */
+            transition: width 0.3s;
+            overflow: hidden;
+            position: fixed; /* Fixa o menu lateral */
+            height: 100%;
+        }
+
+        .sidebar.expanded {
+            width: 250px; /* Largura expandida */
+        }
+
+        .sidebar.collapsed {
+            width: 60px; /* Largura colapsada */
+        }
+
+        .sidebar .nav-link {
+            color: white;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #218838;
+        }
+
+        .content {
+            margin-left: 250px; /* Margem esquerda igual à largura do menu */
+            flex-grow: 1;
+            transition: margin-left 0.3s;
+        }
+
+        .content.collapsed {
+            margin-left: 60px; /* Margem quando o menu está colapsado */
         }
 
         .form-container {
@@ -22,7 +57,6 @@
             padding: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 20px; /* Espaço acima do formulário */
-            flex: 1; /* Faz o contêiner ocupar o espaço restante */
         }
 
         .btn-green {
@@ -45,65 +79,49 @@
             display: block;
             margin: 20px auto; /* Centraliza a logo */
         }
-
-        .navbar {
-            background-color: #28a745; /* Cor do menu */
-        }
     </style>
 </head>
 <body>
 
-    <!-- Navbar superior à esquerda -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="logo-removebg-preview.png" alt="Logo" class="logo" style="max-width: 100px;">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Início</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Sobre</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Serviços</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contato</a>
-                    </li>
-                </ul>
-            </div>
+    <!-- Menu Lateral -->
+    <div class="sidebar expanded" id="sidebar">
+        <div class="text-center">
+            <img src="logo-removebg-preview.png" alt="Logo" class="logo">
         </div>
-    </nav>
+        <nav class="nav flex-column">
+            <a class="nav-link active" href="#">Início</a>
+            <a class="nav-link" href="#">Sobre</a>
+            <a class="nav-link" href="#">Serviços</a>
+            <a class="nav-link" href="#">Contato</a>
+        </nav>
+        <button class="btn btn-dark" id="toggleButton" style="margin: 10px;">Toggle Menu</button>
+    </div>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-6 col-md-8 col-sm-10">
-                <div class="form-container text-center">
-                    <h2 class="mb-4">Pesquisa</h2>
-                    <form id="searchForm">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Nome:</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="date" class="form-label">Data:</label>
-                            <input type="date" class="form-control" id="date" name="date" required>
-                        </div>
-                        <button type="submit" class="btn btn-green btn-block">Pesquisar</button>
-                    </form>
-                </div>
+    <div class="content" id="content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8 col-sm-10">
+                    <div class="form-container text-center">
+                        <h2 class="mb-4">Pesquisa</h2>
+                        <form id="searchForm">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nome:</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="date" class="form-label">Data:</label>
+                                <input type="date" class="form-control" id="date" name="date" required>
+                            </div>
+                            <button type="submit" class="btn btn-green btn-block">Pesquisar</button>
+                        </form>
+                    </div>
 
-                <div class="card mt-4 card-custom" id="resultCard" style="display: none;">
-                    <div class="card-body">
-                        <h4 class="card-title">Resultado da Pesquisa</h4>
-                        <p class="card-text"><strong>Nome:</strong> <span id="resultName"></span></p>
-                        <p class="card-text"><strong>Data:</strong> <span id="resultDate"></span></p>
+                    <div class="card mt-4 card-custom" id="resultCard" style="display: none;">
+                        <div class="card-body">
+                            <h4 class="card-title">Resultado da Pesquisa</h4>
+                            <p class="card-text"><strong>Nome:</strong> <span id="resultName"></span></p>
+                            <p class="card-text"><strong>Data:</strong> <span id="resultDate"></span></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -126,6 +144,22 @@
 
             // Mostra o card
             document.getElementById('resultCard').style.display = 'block';
+        });
+
+        // Função para alternar o menu
+        document.getElementById('toggleButton').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+
+            if (sidebar.classList.contains('expanded')) {
+                sidebar.classList.remove('expanded');
+                sidebar.classList.add('collapsed');
+                content.classList.add('collapsed');
+            } else {
+                sidebar.classList.remove('collapsed');
+                sidebar.classList.add('expanded');
+                content.classList.remove('collapsed');
+            }
         });
     </script>
 
