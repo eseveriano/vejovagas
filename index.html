@@ -15,6 +15,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            flex-direction: column;
         }
 
         .form-container {
@@ -38,9 +39,20 @@
             background-color: #d4edda;
             color: #155724;
         }
+
+        .logo {
+            max-width: 120px; /* Tamanho da logo */
+            margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 </head>
 <body>
+
+    <!-- Logo centralizada -->
+    <img src="https://via.placeholder.com/150x100.png?text=Logo" alt="Logo" class="logo">
 
     <div class="container">
         <div class="row justify-content-center">
@@ -49,7 +61,7 @@
                     <h2 class="mb-4">Pesquisa</h2>
                     <form id="searchForm">
                         <div class="mb-3">
-                            <label for="name" class="form-label">Nome do candidato:</label>
+                            <label for="name" class="form-label">Nome:</label>
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="mb-3">
