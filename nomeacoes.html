@@ -18,14 +18,23 @@
             padding: 10px; /* Padding interno menor */
             width: 280px; /* Largura fixa para os cards */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            overflow: hidden; /* Esconde o conteúdo que sair do card */
         }
         .card-title {
             font-size: 1.2em; /* Tamanho do título */
             color: #343a40; /* Cor do título */
+            white-space: nowrap; /* Não quebra linha */
+            overflow: hidden; /* Esconde o texto que excede */
+            text-overflow: ellipsis; /* Adiciona "..." para texto que excede */
         }
         .card-text {
             font-size: 0.9em; /* Tamanho do texto */
             color: #495057; /* Cor do texto */
+            overflow: hidden; /* Esconde texto que excede */
+            text-overflow: ellipsis; /* Adiciona "..." para texto que excede */
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* Limita o número de linhas exibidas */
+            -webkit-box-orient: vertical;
         }
         .text-muted {
             font-size: 0.8em; /* Tamanho da assinatura */
