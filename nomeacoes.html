@@ -96,8 +96,8 @@
                             <div class="card-body">
                                 <h5 class="card-title">${item.titulo}</h5>
                                 <p class="card-text">${item.texto.replace(/\n/g, '<br>')}</p>
-                                <p class="card-text"><small class="text-muted">Assinatura: ${item.assinatura}</small></p>
-                                <button class="btn btn-primary" onclick="openModal('${item.titulo.replace(/'/g, "\\'")}', '${item.texto.replace(/'/g, "\\'").replace(/\n/g, '<br>')}', '${item.assinatura.replace(/'/g, "\\'")}')">
+                                <p class="card-text"><small class="text-muted">Assinatura: ${typeof item.assinatura === 'string' ? item.assinatura : 'Assinatura não disponível'}</small></p>
+                                <button class="btn btn-primary" onclick="openModal('${item.titulo.replace(/'/g, "\\'")}', '${item.texto.replace(/'/g, "\\'").replace(/\n/g, '<br>')}', '${typeof item.assinatura === 'string' ? item.assinatura.replace(/'/g, "\\'") : ''}')">
                                     <i class="fas fa-info-circle"></i> Ver mais
                                 </button>
                             </div>
