@@ -108,10 +108,10 @@
         }
 
         function openModal(titulo, texto, assinatura) {
-            $('#modalTitle').text(titulo);
+            $('#modalTitle').text("Teste");
             $('#modalBody').html(`
                 <p>${texto}</p>
-                <p><small class="text-muted">Assinatura: ${assinatura}</small></p>
+                <p><small class="text-muted">Assinatura: </small></p>
             `);
             $('#detailsModal').modal('show');
         }
