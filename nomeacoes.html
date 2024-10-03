@@ -48,6 +48,28 @@
             flex-wrap: wrap;
             justify-content: center; /* Centraliza os cards */
         }
+
+        table {
+            width: 100%; /* A tabela ocupa 100% da largura disponível */
+            margin-top: 20px; /* Margem superior */
+            border-collapse: collapse; /* Remove o espaço entre as bordas */
+            background-color: #ffffff; /* Fundo branco para a tabela */
+            border-radius: 8px; /* Bordas arredondadas */
+            overflow: hidden; /* Esconde bordas arredondadas */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+        }
+        th, td {
+            padding: 10px; /* Espaçamento interno das células */
+            text-align: left; /* Alinhamento do texto à esquerda */
+            border-bottom: 1px solid #dee2e6; /* Bordas inferiores das células */
+        }
+        th {
+            background-color: #f8f9fa; /* Fundo cinza claro para cabeçalho */
+            font-weight: bold; /* Negrito no cabeçalho */
+        }
+        tr:hover {
+            background-color: #f1f1f1; /* Destaque na linha ao passar o mouse */
+        }
     </style>
 </head>
 <body>
