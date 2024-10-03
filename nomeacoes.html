@@ -84,7 +84,7 @@
         const totalPages = 11;
 
         function loadPage(page) {
-            $.getJSON(`nomeacoes/portarias_page_${page}.json`, function(data) {
+            $.getJSON(`https://vejovagas.com.br/nomeacoes/portarias_page_${page}.json`, function(data) {
                 let html = '';
                 data.forEach(item => {
                     const escapedTitulo = item.titulo.replace(/'/g, "\\'");
