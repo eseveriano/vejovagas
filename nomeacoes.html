@@ -93,11 +93,12 @@
                     
                     html += `
                         <div class="card">
+                        <button class="btn btn-primary" onclick="openModal('', '', '')">Ver mais</button>
                             <div class="card-body">
                                 <h5 class="card-title">${escapedTitulo}</h5>
                                 <p class="card-text">${item.texto.replace(/\n/g, '<br>')}</p>
                                 <p class="card-text"><small class="text-muted">Assinatura: ${escapedAssinatura}</small></p>
-                                <button class="btn btn-primary" onclick="openModal('${escapedTitulo}', '${escapedTexto}', '${escapedAssinatura}')">Ver mais</button>
+                                
                             </div>
                         </div>
                     `;
