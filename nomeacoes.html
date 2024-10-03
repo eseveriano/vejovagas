@@ -89,7 +89,7 @@
                 data.forEach(item => {
                     const escapedTitulo = item.titulo.replace(/'/g, "\\'");
                     const escapedTexto = item.texto.replace(/'/g, "\\'").replace(/\n/g, '<br>');
-                    const escapedAssinatura = item.assinatura.replace(/'/g, "\\'");
+                    const escapedAssinatura = item.assinatura;
                     
                     html += `
                         <div class="card">
