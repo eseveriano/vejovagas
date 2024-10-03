@@ -50,27 +50,9 @@
             flex-wrap: wrap;
             justify-content: center; /* Centraliza os cards */
         }
-
-        table {
-            width: 100%; /* A tabela ocupa 100% da largura disponível */
-            margin-top: 20px; /* Margem superior */
-            border-collapse: collapse; /* Remove o espaço entre as bordas */
-            background-color: #ffffff; /* Fundo branco para a tabela */
-            border-radius: 8px; /* Bordas arredondadas */
-            overflow: hidden; /* Esconde bordas arredondadas */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
-        }
-        th, td {
-            padding: 10px; /* Espaçamento interno das células */
-            text-align: left; /* Alinhamento do texto à esquerda */
-            border-bottom: 1px solid #dee2e6; /* Bordas inferiores das células */
-        }
-        th {
-            background-color: #f8f9fa; /* Fundo cinza claro para cabeçalho */
-            font-weight: bold; /* Negrito no cabeçalho */
-        }
-        tr:hover {
-            background-color: #f1f1f1; /* Destaque na linha ao passar o mouse */
+        /* Estilos do modal */
+        .modal-content {
+            border-radius: 8px; /* Bordas arredondadas para o modal */
         }
     </style>
 </head>
@@ -81,7 +63,23 @@
         <ul class="pagination justify-content-center" id="pagination"></ul>
     </nav>
 
+    <!-- Modal -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Detalhes da Nomeação</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <p>Conteúdo da nomeação vai aqui...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
     <script>
         let currentPage = 1;
         const totalPages = 11;
@@ -96,6 +94,7 @@
                                 <h5 class="card-title">${item.titulo}</h5>
                                 <p class="card-text">${item.texto}</p>
                                 <p class="card-text"><small class="text-muted">Assinatura: ${item.assinatura}</small></p>
+                                <button class="btn btn-primary" onclick="openModal('${item.titulo}', '${item.texto}', '${item.assinatura}')">Ver mais</button>
                             </div>
                         </div>
                     `;
@@ -103,6 +102,15 @@
                 $('#portarias-container').html(html);
                 updatePagination(page);
             });
+        }
+
+        function openModal(titulo, texto, assinatura) {
+            $('#modalTitle').text(titulo);
+            $('#modalBody').html(`
+                <p>${texto}</p>
+                <p><small class="text-muted">Assinatura: ${assinatura}</small></p>
+            `);
+            $('#detailsModal').modal('show');
         }
 
         function updatePagination(currentPage) {
