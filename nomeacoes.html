@@ -17,9 +17,10 @@
             border-radius: 8px; /* Bordas arredondadas */
             margin: 10px;
             padding: 10px; /* Padding interno */
-            width: 300px; /* Largura fixa para os cards */
+            width: 500px; /* Largura fixa para os cards */
             height: 300px; /* Altura fixa para os cards */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            overflow: hidden; /* Esconde o conteúdo que sair do card */
             display: flex;
             flex-direction: column; /* Alinha os elementos verticalmente */
             justify-content: space-between; /* Espaça os elementos uniformemente */
@@ -97,7 +98,7 @@
                                 <h5 class="card-title">${item.titulo}</h5>
                                 <p class="card-text">${item.texto.replace(/\n/g, '<br>')}</p>
                                 <p class="card-text"><small class="text-muted">Assinatura: ${item.assinatura}</small></p>
-                                <button class="btn btn-primary" onclick="openModal('${item.titulo.replace(/'/g, "\\'")}', '${item.texto.replace(/'/g, "\\'").replace(/\n/g, '<br>')}', '${item.assinatura.replace(/'/g, "\\'")}')">
+                                <button class="btn btn-primary" onclick="openModal('${item.titulo}', '${item.texto.replace(/'/g, "\\'").replace(/\n/g, '<br>')}', '${item.assinatura}')">
                                     <i class="fas fa-info-circle"></i> Ver mais
                                 </button>
                             </div>
