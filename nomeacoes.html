@@ -92,9 +92,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">${item.titulo}</h5>
-                                <p class="card-text">${item.texto}</p>
+                                <p class="card-text">${item.texto.replace(/\n/g, '<br>')}</p>
                                 <p class="card-text"><small class="text-muted">Assinatura: ${item.assinatura}</small></p>
-                                <button class="btn btn-primary" onclick="openModal('${item.titulo}', '${item.texto}', '${item.assinatura}')">Ver mais</button>
+                                <button class="btn btn-primary" onclick="openModal('${item.titulo}', '${item.texto.replace(/'/g, "\\'").replace(/\n/g, '<br>')}', '${item.assinatura}')">Ver mais</button>
                             </div>
                         </div>
                     `;
