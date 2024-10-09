@@ -83,11 +83,12 @@
         
         .card {
             margin-bottom: 20px; /* Espaçamento entre os cards */
+            text-align: center; /* Centraliza o conteúdo do card */
         }
 
-        .card-img-top {
-            max-height: 200px; /* Altura máxima da imagem do card */
-            object-fit: cover; /* Faz com que a imagem cubra o espaço sem distorção */
+        .icon {
+            font-size: 50px; /* Tamanho do ícone */
+            margin: 20px 0; /* Margem acima e abaixo do ícone */
         }
     </style>
 </head>
@@ -113,34 +114,31 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-4 col-md-6">
-                    <div class="card card-custom">
-                       
-                        <div class="card-body text-center">
-                            <h5 class="card-title"><i class="fas fa-user-check"></i> Nomeações</h5>
+                    <a href="nomeacoes.html" class="card card-custom">
+                        <div class="card-body">
+                            <i class="fas fa-user-check icon"></i>
+                            <h5 class="card-title">Nomeações</h5>
                             <p class="card-text">Consulte as últimas nomeações aqui.</p>
-                            <a href="nomeacoes.html" class="btn btn-green">Ver Nomeações</a>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-lg-4 col-md-6">
-                    <div class="card card-custom">
-                        
-                        <div class="card-body text-center">
-                            <h5 class="card-title"><i class="fas fa-user-times"></i> Exonerações</h5>
+                    <a href="#" class="card card-custom">
+                        <div class="card-body">
+                            <i class="fas fa-user-times icon"></i>
+                            <h5 class="card-title">Exonerações</h5>
                             <p class="card-text">Confira as exonerações recentes.</p>
-                            <a href="#" class="btn btn-green">Ver Exonerações</a>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-lg-4 col-md-6">
-                    <div class="card card-custom">
-                       
-                        <div class="card-body text-center">
-                            <h5 class="card-title"><i class="fas fa-briefcase"></i> Vacâncias</h5>
+                    <a href="#" class="card card-custom">
+                        <div class="card-body">
+                            <i class="fas fa-briefcase icon"></i>
+                            <h5 class="card-title">Vacâncias</h5>
                             <p class="card-text">Veja as vacâncias disponíveis.</p>
-                            <a href="#" class="btn btn-green">Ver Vacâncias</a>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
