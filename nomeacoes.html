@@ -125,11 +125,11 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6 col-md-8 col-sm-10">
                     <div class="form-container text-center">
-                        <h2 class="mb-4">Pesquisa</h2>
+                        <h2 class="mb-4">Buscar Nomeações</h2>
                         <form id="searchForm">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Nome:</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
+                                <input type="text" class="form-control" id="name" name="name" >
                             </div>
                             <div class="mb-3">
                                 <label for="date" class="form-label">Data:</label>
@@ -141,8 +141,8 @@
 
                     <div class="card mt-4 card-custom" id="resultCard" style="display: none;">
                         <div class="card-body">
-                            <h4 class="card-title">Resultado da Pesquisa</h4>
-                            <p class="card-text"><strong>Nome:</strong> <span id="resultName"></span></p>
+                            <h4 class="card-title">Nomeações do Dia</h4>
+                            <!-- <p class="card-text"><strong>Nome:</strong> <span id="resultName"></span></p> -->
                             <p class="card-text"><strong>Data:</strong> <span id="resultDate"></span></p>
                         </div>
                     </div>
@@ -256,37 +256,6 @@ function openModal(encodedItemString) {
 
 
 
-
-// function loadPage(page) {
-//     const tipo_dou = "DO2"; // Altere conforme necessário
-//     const dateInput = document.getElementById('date').value; // Obtém a data do campo
-//     const [ano, mes, dia] = dateInput.split('-'); // Desestrutura a data
-
-//     const formattedDate = `${tipo_dou}_${dia}_${mes}_${ano}`; // Formata a data
-
-//     $.getJSON(`https://vejovagas.com.br/nomeacoes/${formattedDate}/portarias_page_${page}.json`, function(data) {
-//         let html = '';
-//         data.forEach(item => {
-//             const escapedTitulo = item.titulo.replace(/'/g, "\\'");
-//             const escapedTexto = item.texto.replace(/'/g, "\\'").replace(/\n/g, '<br>');
-//             const escapedAssinatura = item.assinatura;
-//             const escapedItem = JSON.stringify(item).replace(/'/g, "\\'").replace(/"/g, '&quot;');
-//             html += `
-//                 <div class="card">
-//                     <button class="btn btn-primary" onclick="openModal('${escapedItem}')">Ver mais</button>
-//                     <div class="card-body">
-//                         <h5 class="card-title">${escapedTitulo}</h5>
-//                         <p class="card-text">${escapedTexto}</p>
-//                         <p class="card-text"><small class="text-muted">Assinatura: ${escapedAssinatura}</small></p>
-//                     </div>
-//                 </div>
-//             `;
-//         });
-//         $('#portarias-container').html(html);
-//         updatePagination(page);
-//     });
-// }
-
 function updatePagination(currentPage) {
     let paginationHtml = '';
     for (let i = 1; i <= totalPages; i++) {
@@ -326,8 +295,8 @@ $(document).ready(function() {
     const data_formatada_dou2 = `${tipo_dou}_${dia}_${mes}_${ano}`;
 
     // Preenche o card com os dados da pesquisa
-    document.getElementById('resultName').innerText = name;
-    document.getElementById('resultDate').innerText = date;
+    // document.getElementById('resultName').innerText = name;
+    document.getElementById('resultDate').innerText = `${dia}/${mes}/${ano}`;
     document.getElementById('resultCard').style.display = 'block';
 
     // Carrega a primeira página de resultados com base na data formatada
