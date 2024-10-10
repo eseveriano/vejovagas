@@ -186,7 +186,7 @@ function loadPage(page) {
     const dateInput = document.getElementById('date').value;
     const [ano, mes, dia] = dateInput.split('-');
 
-    const formattedDate = `${dia}_${mes}_${ano}`;
+    const formattedDate = `${dia}-${mes}-${ano}`;
     $('#portarias-container').empty();
 
     $.getJSON(`https://vejovagas.com.br/nomeacoes/${formattedDate}/${page}.json`, function(data) {
