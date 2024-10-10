@@ -67,8 +67,17 @@
         }
 
         .btn-green {
-            background-color: #28a745;
+            background-color: #64a173;
             color: white;
+        }
+
+        .btn-detalhe-green {
+            background-color: #a9aaad8c;
+            color: white;
+        }
+
+        .btn-detalhe-green:hover {
+            background-color: #99a39e00;
         }
 
         .btn-green:hover {
@@ -134,6 +143,45 @@
                             <div class="mb-3">
                                 <label for="date" class="form-label">Data:</label>
                                 <input type="date" class="form-control" id="date" name="date" required>
+                            </div>
+
+                                                    <!-- Alinhamento dos Checkboxes -->
+                            <div class="mb-3">
+                                <label class="form-label">Poder:</label>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="judiciario" id="judiciario">
+                                            <label class="form-check-label" for="judiciario">
+                                                Judiciário
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="legislativo" id="legislativo">
+                                            <label class="form-check-label" for="legislativo">
+                                                Legislativo
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="executivo" id="executivo">
+                                            <label class="form-check-label" for="executivo">
+                                                Executivo
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="ministerio" id="ministerio">
+                                            <label class="form-check-label" for="ministerio">
+                                                M. Público
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <button type="submit" class="btn btn-green btn-block">Pesquisar</button>
                         </form>
@@ -207,7 +255,7 @@ function loadPage(page) {
                         <h5 class="card-title"><b>${titulo}</b></h5>
                         <p class="card-text">${texto}...</p>
                         <p class="card-text"><small class="text-muted">Assinatura: ${assinatura}</small></p>
-                        <button class="btn btn-primary" onclick="openModal('${escapedItem}')">Ver mais</button>
+                        <button class="btn btn-green btn-block" onclick="openModal('${escapedItem}')">Detalhes</button>
                     </div>
                 </div>
             `;
