@@ -186,10 +186,10 @@ function loadPage(page) {
     const dateInput = document.getElementById('date').value;
     const [ano, mes, dia] = dateInput.split('-');
 
-    const formattedDate = `${tipo_dou}_${dia}_${mes}_${ano}`;
+    const formattedDate = `${dia}_${mes}_${ano}`;
     $('#portarias-container').empty();
 
-    $.getJSON(`https://vejovagas.com.br/nomeacoes/${formattedDate}/portarias_page_${page}.json`, function(data) {
+    $.getJSON(`https://vejovagas.com.br/nomeacoes/${formattedDate}/${page}.json`, function(data) {
         console.log('Dados recebidos da API:', data);
         let html = '';
         data.forEach(item => {
