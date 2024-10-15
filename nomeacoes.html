@@ -232,7 +232,7 @@
             const [ano, mes, dia] = dateInput.split('-');
             const date = `${dia}-${mes}-${ano}`;
 
-            $.getJSON(`https://www.vejovagas.com.br/nomeacoes/${date}/metadata.json`, function(data) {
+            $.getJSON(`https://vejovagas.com.br/nomeacoes/${date}/metadata.json`, function(data) {
                 totalPages = Math.ceil(data.total_items / itemsPerPage);
                 loadPage(currentPage);
             }).fail(function() {
