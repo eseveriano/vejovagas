@@ -247,7 +247,7 @@
 
             const formattedDate = `${dia}-${mes}-${ano}`;
 
-            $.getJSON(`https://vejovagas.com.br/nomeacoes/${formattedDate}all.json`, function(data) {
+            $.getJSON(`https://vejovagas.com.br/nomeacoes/${formattedDate}/all.json`, function(data) {
                 const startIndex = (page - 1) * itemsPerPage;
                 const endIndex = startIndex + itemsPerPage;
                 const paginatedItems = data.slice(startIndex, endIndex);
