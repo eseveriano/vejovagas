@@ -10,99 +10,74 @@
     
     <style>
         body {
-            background-color: #f0f8f5;
-            display: flex;
-            min-height: 100vh;
-            margin: 0;
-        }
+        background-color: #f0f8f5;
+        display: flex;
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden; /* Impede a rolagem horizontal */
+    }
 
+    .sidebar {
+        background-color: #bfbfbf;
+        color: white;
+        width: 250px; /* Largura do menu lateral */
+        transition: width 0.3s;
+        overflow: hidden;
+        position: fixed; /* Fixa o menu lateral */
+        height: 100%;
+        z-index: 1000;
+    }
+
+    .sidebar.expanded {
+        width: 220px; /* Largura expandida */
+    }
+
+    .sidebar.collapsed {
+        width: 0; /* Largura colapsada */
+        padding: 0; /* Remove padding quando colapsado */
+    }
+
+    .content {
+        margin-left: 250px; /* Margem esquerda igual à largura do menu */
+        flex-grow: 1;
+        transition: margin-left 0.3s;
+    }
+
+    .content.collapsed {
+        margin-left: 0; /* Margem quando o menu está colapsado */
+    }
+
+    .form-container {
+        background-color: #e9f7ef;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 20px; /* Espaço acima do formulário */
+        max-width: 100%; /* Limita a largura em telas pequenas */
+        overflow: auto; /* Adiciona rolagem se necessário */
+    }
+
+    @media (max-width: 768px) {
         .sidebar {
-            background-color: #bfbfbf;
-            color: white;
-            width: 250px; /* Largura do menu lateral */
-            transition: width 0.3s;
-            overflow: hidden;
-            position: fixed; /* Fixa o menu lateral */
-            height: 100%;
-            z-index: 1000;
+            width: 200px; /* Reduz a largura da sidebar em telas pequenas */
         }
 
-        .sidebar.expanded {
-            width: 220px; /* Largura expandida */
+        .content {
+            margin-left: 200px; /* Ajusta a margem esquerda */
         }
 
         .sidebar.collapsed {
             width: 0; /* Largura colapsada */
-            padding: 0; /* Remove padding quando colapsado */
-        }
-
-        .sidebar nav {
-            margin-top: 50px; /* Espaçamento de 30px no topo dos links */
-        }
-
-        .sidebar .nav-link {
-            color: white;
-        }
-
-        .sidebar .nav-link:hover {
-            background-color: #218838;
-        }
-
-        .content {
-            margin-left: 250px; /* Margem esquerda igual à largura do menu */
-            flex-grow: 1;
-            transition: margin-left 0.3s;
         }
 
         .content.collapsed {
             margin-left: 0; /* Margem quando o menu está colapsado */
         }
 
-        .form-container {
-            background-color: #e9f7ef;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 20px; /* Espaço acima do formulário */
-        }
-
-        .btn-green {
-            background-color: #64a173;
-            color: white;
-        }
-
-        .btn-detalhe-green {
-            background-color: #a9aaad8c;
-            color: white;
-        }
-
-        .btn-detalhe-green:hover {
-            background-color: #99a39e00;
-        }
-
-        .btn-green:hover {
-            background-color: #218838;
-        }
-
-        .card-custom {
-            border: none;
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .logo {
-            max-width: 150px; /* Tamanho da logo */
-            display: block;
-            margin: 20px auto; /* Centraliza a logo */
-        }
-
-        /* Botão fixo para abrir/fechar o menu */
         #toggleButton {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 2000; /* Garante que o botão fique acima de outros elementos */
+            left: 10px; /* Mantém a posição do botão */
         }
+    }
         
         #portarias-container {
             display: flex;
