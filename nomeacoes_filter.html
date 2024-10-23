@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vejo Vagas :</title>
+    <title>Vejo Vagas</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="css/nomeacoes.css" rel="stylesheet">
 </head>
 <body>
@@ -20,7 +21,7 @@
         <nav class="nav flex-column">
             <a class="nav-link active" href="index.html">Início</a>
             <a class="nav-link" href="index.html">Sobre</a>
-            <a class="nav-link" href="nomeacoes.html">Nomeações </a>
+            <a class="nav-link" href="nomeacoes.html">Nomeações</a>
             <a class="nav-link" href="index.html">Ranking pós-prova</a>
         </nav>
     </div>
@@ -35,69 +36,71 @@
                     <div class="form-container text-center">
                         <h2 class="mb-4">Buscar Nomeações</h2>
                         <form id="searchForm">
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Nome:</label>
-                                <input type="text" class="form-control" id="name" name="name" >
-                            </div>
-                            <div class="mb-3">
-                                <label for="date" class="form-label">Data:</label>
-                                <input type="date" class="form-control" id="date" name="date" required>
+                            <div class="mb-3 d-flex align-items-center justify-content-center">
+                                <button class="btn btn-secondary me-2" id="prevDate" aria-label="Dia Anterior">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <input type="date" class="form-control me-2" id="date" name="date" required>
+                                <button class="btn btn-secondary ms-2" id="nextDate" aria-label="Próximo Dia">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
                             </div>
 
-                                                    <!-- Alinhamento dos Checkboxes -->
                             <div class="mb-3">
                                 <label class="form-label">Poder:</label>
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="judiciario" id="judiciario">
-                                            <label class="form-check-label" for="judiciario">
-                                                Judiciário
-                                            </label>
+                                            <input class="form-check-input" type="checkbox" value="tribunal" id="judiciario">
+                                            <label class="form-check-label" for="judiciario">Judiciário</label>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="legislativo" id="legislativo">
-                                            <label class="form-check-label" for="legislativo">
-                                                Legislativo
-                                            </label>
+                                            <label class="form-check-label" for="legislativo">Legislativo</label>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="executivo" id="executivo">
-                                            <label class="form-check-label" for="executivo">
-                                                Executivo
-                                            </label>
+                                            <label class="form-check-label" for="executivo">Executivo</label>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="ministerio" id="ministerio">
-                                            <label class="form-check-label" for="ministerio">
-                                                M. Público
-                                            </label>
+                                            <label class="form-check-label" for="ministerio">M. Público</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-green btn-block">Pesquisar</button>
                         </form>
                     </div>
 
-                    <div class="card mt-4 card-custom" id="resultCard" style="display: none;">
+                    <div class="card mt-4" id="resultCard" style="display: none;">
                         <div class="card-body">
                             <h4 class="card-title">Nomeações do Dia</h4>
-                            <!-- <p class="card-text"><strong>Nome:</strong> <span id="resultName"></span></p> -->
                             <p class="card-text"><strong>Data:</strong> <span id="resultDate"></span></p>
                         </div>
                     </div>
 
-                    <div id="portarias-container"></div>
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center" id="pagination"></ul>
-                    </nav>
+                    <div class="mb-3">
+                        <label for="searchInput" class="form-label">Pesquisar:</label>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Digite o que deseja buscar">
+                    </div>
+                    
+                    <table class="table table-bordered mt-4" id="resultsTable" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Órgão</th>
+                                <th>Dados</th>
+                                <th>Visualizações</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsBody"></tbody>
+                    </table>
 
                     <!-- Modal -->
                     <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">

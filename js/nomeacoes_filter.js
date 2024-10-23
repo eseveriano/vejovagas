@@ -1,51 +1,37 @@
-let currentPage = 1;
-const totalPages = 11;
-
-
-
-
-function loadPage(page) {
-    const tipo_dou = "DO2";
+function loadResults() {
     const dateInput = document.getElementById('date').value;
     const [ano, mes, dia] = dateInput.split('-');
-
     const formattedDate = `${dia}-${mes}-${ano}`;
-    $('#portarias-container').empty();
+    $('#resultsBody').empty(); // Limpa o conteúdo da tabela
 
-    $.getJSON(`https://vejovagas.com.br/nomeacoes/${formattedDate}/${page}.json`, function(data) {
+    $.getJSON(`https://vejovagas.com.br/nomeacoes/${formattedDate}/all.json`, function(data) {
         console.log('Dados recebidos da API:', data);
-        let html = '';
-        data.forEach(item => {
-            console.log('Item atual:', item);
-            // Escape de caracteres especiais e codificação em Base64
-            const escapedItem = btoa(JSON.stringify(item));
-            
-            const titulo = escapeHtml(String(item.titulo || ''));
-            const texto = escapeHtml(String(item.texto || '').substring(0, 200));
-            const assinatura = escapeHtml(String(item.assinatura || ''));
-            
-            html += `
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title"><b>${titulo}</b></h5>
-                        <p class="card-text">${texto}...</p>
-                        <p class="card-text"><small class="text-muted">Assinatura: ${assinatura}</small></p>
-                        <button class="btn btn-green btn-block" onclick="openModal('${escapedItem}')">Detalhes</button>
-                    </div>
-                </div>
-            `;
-        });
-        $('#portarias-container').html(html);
-        updatePagination(page);
+        
+        if (data.length > 0) {
+            $('#resultsTable').show(); // Exibe a tabela
+            data.forEach(item => {
+                const escapedItem = btoa(JSON.stringify(item));
+                const titulo = escapeHtml(String(item.titulo || ''));
+                const texto = escapeHtml(String(item.texto || '').substring(0, 200));
+                const assinatura = escapeHtml(String(item.assinatura || ''));
+                
+                $('#resultsBody').append(`
+                    <tr>
+                        <td>${titulo.split('/')[1]}</td>
+                        <td>${texto}...</td>
+                        <td>${assinatura}</td>
+                        <td><button class="btn btn-green" onclick="openModal('${escapedItem}')">Detalhes</button></td>
+                    </tr>
+                `);
+            });
+        } else {
+            $('#resultsTable').hide(); // Esconde a tabela se não houver resultados
+        }
     });
 }
 
 // Função auxiliar para escapar HTML
 function escapeHtml(unsafe) {
-    if (typeof unsafe !== 'string') {
-        console.warn('escapeHtml recebeu um valor não-string:', unsafe);
-        return '';
-    }
     return unsafe
          .replace(/&/g, "&amp;")
          .replace(/</g, "&lt;")
@@ -57,7 +43,6 @@ function escapeHtml(unsafe) {
 function openModal(encodedItemString) {
     try {
         const decodedItemString = atob(encodedItemString);
-        console.log('String decodificada:', decodedItemString);
         const item = JSON.parse(decodedItemString);
         if (item && item.titulo && item.texto && item.assinatura) {
             $('#modalTitle').text(String(item.titulo));
@@ -66,96 +51,96 @@ function openModal(encodedItemString) {
                 <p><small class="text-muted">Assinatura: ${String(item.assinatura)}</small></p>
             `);
             $('#detailsModal').modal('show');
-        } else {
-            console.error('Item inválido:', item);
         }
     } catch (error) {
         console.error('Erro ao parsear o item:', error);
-        console.log('String codificada recebida:', encodedItemString);
     }
-}
-
-
-
-
-
-function updatePagination(currentPage) {
-    let paginationHtml = '';
-    for (let i = 1; i <= totalPages; i++) {
-        if (i === currentPage) {
-            paginationHtml += `<li class="page-item active"><a class="page-link" href="#">${i}</a></li>`;
-        } else {
-            paginationHtml += `<li class="page-item"><a class="page-link" href="#" onclick="loadPage(${i}); event.preventDefault();">${i}</a></li>`;
-        }
-    }
-    $('#pagination').html(paginationHtml);
 }
 
 $(document).ready(function() {
-    loadPage('all'); // Carrega a primeira página ao iniciar
+    const today = new Date();
+    document.getElementById('date').value = today.toISOString().split('T')[0]; // Define a data atual
+    loadResults(); // Carrega resultados ao iniciar
+
+    // Atualiza a tabela de resultados ao mudar a data
+    document.getElementById('date').addEventListener('change', loadResults);
 });
 
-
-
-        document.getElementById('searchForm').addEventListener('submit', function(event) {
+document.getElementById('searchForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Evita o envio do formulário
+    const date = document.getElementById('date').value;
+    const [ano, mes, dia] = date.split('-');
 
-    const name = document.getElementById('name').value;
-    const date = document.getElementById('date').value; // Data selecionada pelo usuário
-
-    console.log("Data selecionada:", date); // Log da data selecionada
-
-    // Formatação da data conforme especificado
-    const tipo_dou = "DO2";
-    const dataObj = new Date(date);
-    
-    const dia = dataObj.getUTCDate().toString().padStart(2, '0');
-    const mes = (dataObj.getUTCMonth() + 1).toString().padStart(2, '0');
-    const ano = dataObj.getUTCFullYear();
-
-    console.log("Dia:", dia, "Mês:", mes, "Ano:", ano); // Log dos valores de dia, mês e ano
-
-    const data_formatada_dou2 = `${tipo_dou}_${dia}_${mes}_${ano}`;
-
-    // Preenche o card com os dados da pesquisa
-    // document.getElementById('resultName').innerText = name;
     document.getElementById('resultDate').innerText = `${dia}/${mes}/${ano}`;
     document.getElementById('resultCard').style.display = 'block';
 
-    // Carrega a primeira página de resultados com base na data formatada
-    loadPage(1, data_formatada_dou2);
+    loadResults(); // Carrega resultados com a nova data
 });
 
-        document.getElementById('toggleButton').addEventListener('click', function() {
-            const sidebar = document.getElementById('sidebar');
-            const content = document.getElementById('content');
-            sidebar.classList.toggle('collapsed');
-            content.classList.toggle('collapsed');
-        });
-    
-    
-    
-    
-    
-    
-    // Função para formatar a data como YYYY-MM-DD
-    function formatDate(date) {
-        var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
+document.getElementById('toggleButton').addEventListener('click', function() {
+    const sidebar = document.getElementById('sidebar');
+    const content = document.getElementById('content');
+    sidebar.classList.toggle('collapsed');
+    content.classList.toggle('collapsed');
+});
 
-        if (month.length < 2) 
-            month = '0' + month;
-        if (day.length < 2) 
-            day = '0' + day;
+document.getElementById('prevDate').addEventListener('click', function() {
+    const dateInput = document.getElementById('date');
+    const currentDate = new Date(dateInput.value);
+    currentDate.setDate(currentDate.getDate() - 1); // Subtrai um dia
+    dateInput.value = currentDate.toISOString().split('T')[0]; // Atualiza a data
+    loadResults(); // Carrega resultados com a nova data
+});
 
-        return [year, month, day].join('-');
-    }
+document.getElementById('nextDate').addEventListener('click', function() {
+    const dateInput = document.getElementById('date');
+    const currentDate = new Date(dateInput.value);
+    currentDate.setDate(currentDate.getDate() + 1); // Adiciona um dia
+    dateInput.value = currentDate.toISOString().split('T')[0]; // Atualiza a data
+    loadResults(); // Carrega resultados com a nova data
+});
 
-    // Definir a data atual como valor padrão
-    document.addEventListener('DOMContentLoaded', function() {
-        var today = new Date();
-        var formattedDate = formatDate(today);
-        document.getElementById('date').value = formattedDate;
+
+// Função de filtragem (exemplo)
+function filtrar(filtros) {
+    const rows = document.querySelectorAll('#resultsBody tr');
+
+    // Divide a string de filtros em um array de palavras
+    const filterArray = filtros.split(' || ').flatMap(filter => filter.split(' '));
+
+    rows.forEach(row => {
+        const title = row.cells[0].textContent.toLowerCase();
+        const signature = row.cells[1].textContent.toLowerCase();
+
+        // Verifica se todas as palavras do filtro estão presentes no título ou assinatura
+        const matchesFilters = filterArray.every(filter => 
+            title.includes(filter.toLowerCase()) || signature.includes(filter.toLowerCase())
+        );
+
+        row.style.display = matchesFilters ? '' : 'none'; // Exibe ou esconde a linha
     });
+}
+
+
+// Função para buscar dados com base nos poderes selecionados
+function searchByPower() {
+    const busc = document.getElementById('searchInput').value;
+    
+    const selectedPowers = [];
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    checkboxes.forEach(checkbox => {
+        selectedPowers.push(checkbox.value);
+    });
+    selectedPowers.push(busc);
+    console.log("Poderes selecionados:", selectedPowers.join(' '));
+    filtrar(selectedPowers.join(' || '));
+    // Implementar lógica de filtragem com base nos poderes selecionados
+}
+
+
+// Adiciona evento para os checkboxes
+document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener('change', searchByPower);
+});
+
+document.getElementById('searchInput').addEventListener('input', searchByPower);
