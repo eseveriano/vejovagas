@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Drive Video Player - Teste</title>
+    <title>V2 - Google Drive Video Player - Teste</title>
     <style>
         * {
             margin: 0;
@@ -452,11 +452,28 @@
             }
         }
 
+        // function signIn() {
+        //     gapi.auth2.getAuthInstance().signIn().catch(error => {
+        //         showError('Erro ao fazer login');
+        //     });
+        // }
+
         function signIn() {
-            gapi.auth2.getAuthInstance().signIn().catch(error => {
-                showError('Erro ao fazer login');
-            });
-        }
+    const auth = gapi.auth2.getAuthInstance();
+    if (!auth) {
+        console.error('AuthInstance não inicializado!');
+        showError('Erro: auth2 não inicializado');
+        return;
+    }
+    auth.signIn()
+        .then(user => {
+            console.log('Usuário:', user);
+        })
+        .catch(error => {
+            console.error('Erro no signIn:', error);
+            showError('Erro ao fazer login: ' + error.error);
+        });
+}
 
         function signOut() {
             gapi.auth2.getAuthInstance().signOut();
