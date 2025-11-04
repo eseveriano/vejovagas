@@ -1,169 +1,574 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Login com Google</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Drive Video Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <!-- 🔒 Corrige CSP para permitir scripts do Google -->
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' https://accounts.google.com https://apis.google.com https://www.gstatic.com; 
-                 script-src 'self' 'unsafe-inline' 'unsafe-eval' https://accounts.google.com https://apis.google.com https://www.gstatic.com; 
-                 frame-src https://accounts.google.com https://apis.google.com; 
-                 connect-src 'self' https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com;">
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+        }
 
-  <!-- 🔹 Carrega o SDK do Google -->
-  <script async defer src="https://apis.google.com/js/api.js"></script>
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+        }
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 100px;
-    }
-    button {
-      background-color: #4285F4;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #3367D6;
-    }
-  </style>
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        button:hover:not(:disabled) {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button.secondary {
+            background: #374151;
+        }
+
+        button.secondary:hover:not(:disabled) {
+            background: #4b5563;
+        }
+
+        button.danger {
+            background: #dc2626;
+        }
+
+        button.danger:hover:not(:disabled) {
+            background: #b91c1c;
+        }
+
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
+            padding: 2rem;
+        }
+
+        .login-box {
+            background: white;
+            color: #1f2937;
+            border-radius: 1rem;
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .login-box h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-box p {
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #fecaca;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .player-section {
+            flex: 1;
+        }
+
+        .video-container {
+            background: #1f2937;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-frame {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: black;
+        }
+
+        .video-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .player-controls button {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .video-counter {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        .playlist {
+            width: 320px;
+            background: #1f2937;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            max-height: 80vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .playlist-header {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .playlist-items {
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .playlist-item {
+            background: #374151;
+            padding: 0.875rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .playlist-item:hover {
+            background: #4b5563;
+        }
+
+        .playlist-item.active {
+            background: #2563eb;
+        }
+
+        .playlist-item-number {
+            font-size: 0.75rem;
+            font-family: monospace;
+            min-width: 1.5rem;
+        }
+
+        .playlist-item-name {
+            flex: 1;
+            font-size: 0.875rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .empty-state {
+            background: #1f2937;
+            border-radius: 1rem;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-text {
+            color: #9ca3af;
+            font-size: 1.125rem;
+        }
+
+        .loading {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .setup-instructions {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: #f3f4f6;
+            border-radius: 0.5rem;
+            text-align: left;
+        }
+
+        .setup-instructions h3 {
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .setup-instructions ol {
+            margin-left: 1.5rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .playlist {
+                width: 100%;
+                max-height: 400px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <div id="loginScreen" class="login-screen">
-    <h1>🎥  V2 - Google Drive Video Player</h1>
-    <p>Faça login com sua conta Google para listar seus vídeos</p>
-    <div id="errorMessage" class="error" style="display:none"></div>
-    <button onclick="signIn()">🔐 Fazer login com Google</button>
-  </div>
-
-  <div id="mainContent" style="display:none; padding:20px;">
-    <h2>📂 Meus Vídeos</h2>
-    <div id="headerControls">
-      <button onclick="loadVideos()">🔄 Recarregar</button>
-      <button onclick="signOut()" style="background:#dc2626;">🚪 Sair</button>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span>▶️</span>
+                <span>Drive Video Player</span>
+            </div>
+            <div class="controls" id="headerControls" style="display: none;">
+                <button onclick="loadVideos()" id="loadBtn">
+                    <span id="loadBtnText">📂 Carregar Vídeos</span>
+                </button>
+                <button onclick="togglePlaylist()" class="secondary" id="togglePlaylistBtn">
+                    Ocultar Playlist
+                </button>
+                <button onclick="signOut()" class="danger">Sair</button>
+            </div>
+        </div>
     </div>
-    <hr><br>
-    <div class="video-container">
-      <iframe id="videoFrame" allow="autoplay" allowfullscreen></iframe>
+
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-box">
+            <div class="login-icon">▶️</div>
+            <h1>Google Drive Video Player</h1>
+            <p>Faça login para acessar seus vídeos</p>
+
+            <div id="errorMessage" class="error" style="display: none;"></div>
+
+            <button onclick="signIn()" style="width: 100%; padding: 1rem;">
+                🔐 Fazer Login com Google
+            </button>
+
+            <div class="setup-instructions">
+                <h3>⚠️ Configuração Necessária:</h3>
+                <ol>
+                    <li>Criar projeto no Google Cloud Console</li>
+                    <li>Ativar Google Drive API</li>
+                    <li>Criar credenciais OAuth 2.0</li>
+                    <li>Adicionar CLIENT_ID e API_KEY no código (linhas 30-31)</li>
+                </ol>
+            </div>
+        </div>
     </div>
-    <h3 id="videoTitle">Selecione um vídeo...</h3>
-    <div id="playlist"></div>
-  </div>
 
-  <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()" onerror="showError('Erro ao carregar API do Google')"></script>
+    <!-- Main Content -->
+    <div id="mainContent" style="display: none;">
+        <div class="container">
+            <div id="errorContainer"></div>
 
-  <script>
-    // 🔧 Substitua pelas suas credenciais:
-    const CLIENT_ID = '4927762607-epeb8secs5nsjtr09vj9j6jf8shnc1cj.apps.googleusercontent.com';
-    const API_KEY = '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';
-    const FOLDER_ID = '1ShAxJa7BvqSQITNdOLRgqW7VByyQEIOK';
-    const SCOPES = 'https://www.googleapis.com/auth/drive.readonly';
+            <div class="main-content">
+                <!-- Player -->
+                <div class="player-section">
+                    <div id="emptyState" class="empty-state">
+                        <div class="empty-icon">📹</div>
+                        <div class="empty-text">Clique em "Carregar Vídeos" para começar</div>
+                    </div>
 
-    let videos = [];
-    let currentIndex = 0;
+                    <div id="videoPlayer" style="display: none;">
+                        <div class="video-container">
+                            <div class="video-frame">
+                                <iframe id="videoFrame" allow="autoplay" allowfullscreen></iframe>
+                            </div>
+                            <div class="video-info">
+                                <div class="video-title" id="videoTitle">Nenhum vídeo selecionado</div>
+                                <div class="player-controls">
+                                    <button onclick="previousVideo()" id="prevBtn" disabled>⏮️</button>
+                                    <button onclick="nextVideo()" id="nextBtn" disabled>⏭️</button>
+                                </div>
+                                <div class="video-counter" id="videoCounter">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-    function showError(msg) {
-      const el = document.getElementById('errorMessage');
-      if (el) { el.textContent = msg; el.style.display = 'block'; }
-      console.error(msg);
-    }
+                <!-- Playlist -->
+                <div class="playlist" id="playlist" style="display: none;">
+                    <div class="playlist-header">
+                        📋 Playlist (<span id="playlistCount">0</span>)
+                    </div>
+                    <div class="playlist-items" id="playlistItems"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    function gapiLoaded() {
-      gapi.load('client:auth2', () => {
-        // Pequeno delay ajuda a estabilizar o auth2
-        setTimeout(initClient, 300);
-      });
-    }
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script>
+        // ⚠️ CONFIGURAÇÃO NECESSÁRIA - Substitua com suas credenciais
+        const CLIENT_ID = '4927762607-epeb8secs5nsjtr09vj9j6jf8shnc1cj.apps.googleusercontent.com';
+        const API_KEY = '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';
+        const FOLDER_ID = '1ShAxJa7BvqSQITNdOLRgqW7VByyQEIOK';
+        const SCOPES = 'https://www.googleapis.com/auth/drive.readonly';
 
-    async function initClient() {
-      try {
-        await gapi.client.init({
-          apiKey: API_KEY,
-          clientId: CLIENT_ID,
-          discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
-          scope: SCOPES
-        });
+        let videos = [];
+        let currentVideoIndex = 0;
+        let showingPlaylist = true;
 
-        const auth = gapi.auth2.getAuthInstance();
-        auth.isSignedIn.listen(updateSigninStatus);
-        updateSigninStatus(auth.isSignedIn.get());
-      } catch (err) {
-        showError('Falha ao inicializar cliente Google: ' + err.message);
-      }
-    }
+        // Inicializar Google API
+        function initClient() {
+            gapi.client.init({
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+                scope: SCOPES
+            }).then(() => {
+                const authInstance = gapi.auth2.getAuthInstance();
+                authInstance.isSignedIn.listen(updateSigninStatus);
+                updateSigninStatus(authInstance.isSignedIn.get());
+            }).catch(error => {
+                showError('Erro ao inicializar: Verifique CLIENT_ID e API_KEY');
+            });
 
-    function updateSigninStatus(isSignedIn) {
-      if (isSignedIn) {
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('mainContent').style.display = 'block';
-        loadVideos();
-      } else {
-        document.getElementById('loginScreen').style.display = 'flex';
-        document.getElementById('mainContent').style.display = 'none';
-      }
-    }
-
-    async function signIn() {
-      try {
-        const auth = gapi.auth2.getAuthInstance();
-        if (!auth) return showError('Auth2 não inicializado');
-        await auth.signIn();
-      } catch (err) {
-        if (err.error === 'popup_closed_by_user') {
-          console.warn('Login cancelado pelo usuário (popup fechado)');
-        } else {
-          showError('Erro ao fazer login: ' + (err.error || err.message));
+            console.log('gapi.auth2:', gapi.auth2);
+            console.log('AuthInstance:', gapi.auth2.getAuthInstance());
         }
-      }
-    }
 
-    function signOut() {
-      const auth = gapi.auth2.getAuthInstance();
-      if (auth) auth.signOut();
-    }
+        function updateSigninStatus(isSignedIn) {
+            if (isSignedIn) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                document.getElementById('headerControls').style.display = 'flex';
+            } else {
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('mainContent').style.display = 'none';
+                document.getElementById('headerControls').style.display = 'none';
+            }
+        }
 
-    async function loadVideos() {
-      try {
-        const res = await gapi.client.drive.files.list({
-          q: `'${FOLDER_ID}' in parents and mimeType contains 'video/'`,
-          fields: 'files(id, name)',
-          orderBy: 'name'
-        });
-        videos = res.result.files || [];
-        if (videos.length === 0) return showError('Nenhum vídeo encontrado na pasta.');
-        renderPlaylist();
-        playVideo(0);
-      } catch (err) {
-        showError('Erro ao listar vídeos: ' + err.message);
-      }
-    }
+        function signIn() {
+            gapi.auth2.getAuthInstance().signIn().catch(error => {
+                showError('Erro ao fazer login');
+            });
+        }
 
-    function renderPlaylist() {
-      const pl = document.getElementById('playlist');
-      pl.innerHTML = '';
-      videos.forEach((v, i) => {
-        const item = document.createElement('div');
-        item.className = 'playlist-item' + (i === currentIndex ? ' active' : '');
-        item.textContent = v.name;
-        item.onclick = () => playVideo(i);
-        pl.appendChild(item);
-      });
-    }
+        function signOut() {
+            gapi.auth2.getAuthInstance().signOut();
+            videos = [];
+            currentVideoIndex = 0;
+        }
 
-    function playVideo(i) {
-      currentIndex = i;
-      const v = videos[i];
-      document.getElementById('videoFrame').src = `https://drive.google.com/file/d/${v.id}/preview`;
-      document.getElementById('videoTitle').textContent = v.name;
-      renderPlaylist();
-    }
-  </script>
+        function showError(message) {
+            const errorMsg = document.getElementById('errorMessage');
+            if (errorMsg) {
+                errorMsg.textContent = message;
+                errorMsg.style.display = 'block';
+            }
+
+            const errorContainer = document.getElementById('errorContainer');
+            if (errorContainer) {
+                errorContainer.innerHTML = `<div class="error" style="margin-bottom: 1rem;">${message}</div>`;
+            }
+        }
+
+        async function loadVideos() {
+            const loadBtn = document.getElementById('loadBtn');
+            const loadBtnText = document.getElementById('loadBtnText');
+
+            loadBtn.disabled = true;
+            loadBtnText.innerHTML = '⏳ Carregando...';
+
+            try {
+                const response = await gapi.client.drive.files.list({
+                    q: `'${FOLDER_ID}' in parents and (mimeType contains 'video/' or fileExtension = 'mp4' or fileExtension = 'avi' or fileExtension = 'mov' or fileExtension = 'mkv')`,
+                    fields: 'files(id, name, mimeType)',
+                    orderBy: 'name'
+                });
+
+                videos = response.result.files || [];
+
+                if (videos.length === 0) {
+                    showError('Nenhum vídeo encontrado na pasta');
+                } else {
+                    renderPlaylist();
+                    playVideo(0);
+                }
+            } catch (error) {
+                showError('Erro ao listar vídeos: ' + error.message);
+            } finally {
+                loadBtn.disabled = false;
+                loadBtnText.innerHTML = '📂 Carregar Vídeos';
+            }
+        }
+
+        function renderPlaylist() {
+            const playlistItems = document.getElementById('playlistItems');
+            const playlist = document.getElementById('playlist');
+            const playlistCount = document.getElementById('playlistCount');
+
+            playlistCount.textContent = videos.length;
+            playlist.style.display = 'flex';
+
+            playlistItems.innerHTML = videos.map((video, index) => `
+                <div class="playlist-item ${index === currentVideoIndex ? 'active' : ''}" 
+                     onclick="playVideo(${index})" 
+                     data-index="${index}">
+                    <div class="playlist-item-number">${index + 1}</div>
+                    <div class="playlist-item-name">${video.name}</div>
+                </div>
+            `).join('');
+        }
+
+        function playVideo(index) {
+            currentVideoIndex = index;
+            const video = videos[index];
+
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('videoPlayer').style.display = 'block';
+
+            document.getElementById('videoFrame').src = `https://drive.google.com/file/d/${video.id}/preview`;
+            document.getElementById('videoTitle').textContent = video.name;
+            document.getElementById('videoCounter').textContent = `Vídeo ${index + 1} de ${videos.length}`;
+
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === videos.length - 1;
+
+            // Update playlist active item
+            document.querySelectorAll('.playlist-item').forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+        }
+
+        function previousVideo() {
+            if (currentVideoIndex > 0) {
+                playVideo(currentVideoIndex - 1);
+            }
+        }
+
+        function nextVideo() {
+            if (currentVideoIndex < videos.length - 1) {
+                playVideo(currentVideoIndex + 1);
+            }
+        }
+
+        function togglePlaylist() {
+            showingPlaylist = !showingPlaylist;
+            const playlist = document.getElementById('playlist');
+            const toggleBtn = document.getElementById('togglePlaylistBtn');
+
+            playlist.style.display = showingPlaylist ? 'flex' : 'none';
+            toggleBtn.textContent = showingPlaylist ? 'Ocultar Playlist' : 'Mostrar Playlist';
+        }
+
+        // Inicializar quando a API carregar
+        gapi.load('client:auth2', initClient);
+    </script>
 </body>
+
 </html>
